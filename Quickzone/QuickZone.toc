@@ -1,0 +1,5 @@
+## Interface: 90005
+## Title: Quick Zone
+## Notes: Help send you to graveyard
+
+QuickZone.lua

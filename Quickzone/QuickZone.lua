@@ -1,0 +1,57 @@
+--Creates a group, you have to hit it once then enter a name for the group and hit button again.
+local buttoncreate = CreateFrame("Button", "CreateGroup", UIParent, 'UIPanelButtonTemplate')
+	buttoncreate:SetMovable(true)
+	--buttoncreate:EnableMouse(true)
+	buttoncreate:RegisterForDrag("LeftButton")
+	buttoncreate:SetScript("OnDragStart", buttoncreate.StartMoving)
+	buttoncreate:SetScript("OnDragStop", buttoncreate.StopMovingOrSizing)
+	buttoncreate:SetPoint("LEFT",200,0)
+    buttoncreate:SetSize(100,20)
+	buttoncreate:SetText('Create')
+	buttoncreate:RegisterForClicks("LeftButtonUp")
+    buttoncreate:SetScript("OnClick", function() startgroup() end)
+    buttoncreate:SetAlpha(0.2)
+    buttoncreate:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+    buttoncreate:SetScript("OnLeave", function(self) self:SetAlpha(0.2) end)
+
+--leave group big button
+local leaveButton = CreateFrame("Button", "LeaveButton", UIParent, "UIPanelButtonTemplate")
+	leaveButton:SetPoint("BOTTOM", buttoncreate,0,-20)
+	leaveButton:SetSize(100,20)
+	leaveButton:SetText("Leave Group")
+	leaveButton:RegisterForClicks("LeftButtonUp")
+	leaveButton:SetScript("OnClick", function() C_PartyInfo.LeaveParty() end)
+	leaveButton:SetAlpha(0.2)
+    leaveButton:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+    leaveButton:SetScript("OnLeave", function(self) self:SetAlpha(0.2) end)
+
+--Reset group big button
+local resetButton = CreateFrame("Button", "resetButton", UIParent, "UIPanelButtonTemplate")
+	resetButton:SetPoint("BOTTOM", buttoncreate,0,-40)
+	resetButton:SetSize(100,20)
+	resetButton:SetText("Reset")
+	resetButton:RegisterForClicks("LeftButtonUp")
+	resetButton:SetScript("OnClick", function() ResetInstances() end)
+	resetButton:SetAlpha(0.2)
+    resetButton:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+    resetButton:SetScript("OnLeave", function(self) self:SetAlpha(0.2) end)
+
+function startgroup()
+PVEFrame_ToggleFrame()
+  GroupFinderFrameGroupButton3:Click()
+  C_Timer.After(0.25,function()
+    LFGListCategorySelection_SelectCategory(LFGListFrame.CategorySelection,6,0)
+    LFGListFrame.CategorySelection.StartGroupButton:Click()
+    C_Timer.After(0.25,function()
+      LFGListFrame.EntryCreation.ListGroupButton:Click()
+      frame = frame or CreateFrame("Frame")
+      frame:SetScript("OnEvent",function(self)
+        self:UnregisterEvent("LFG_LIST_ACTIVE_ENTRY_UPDATE")
+      end)
+      frame:RegisterEvent("LFG_LIST_ACTIVE_ENTRY_UPDATE")
+    end)
+  end)
+end
+
+	
+	
